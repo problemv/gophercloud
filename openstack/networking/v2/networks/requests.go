@@ -58,22 +58,23 @@ func Get(c *gophercloud.ServiceClient, id string) (r GetResult) {
 	return
 }
 
-// CreateOptsBuilder allows extensions to add additional parameters to the
-// Create request.
+// CreateOptsBuilder is the interface options structs have to satisfy in order
+// to be used in the main Create operation in this package. Since many
+// extensions decorate or modify the common logic, it is useful for them to
+// satisfy a basic interface in order for them to be used.
 type CreateOptsBuilder interface {
 	ToNetworkCreateMap() (map[string]interface{}, error)
 }
 
-// CreateOpts represents options used to create a network.
+// CreateOpts satisfies the CreateOptsBuilder interface
 type CreateOpts struct {
-	AdminStateUp          *bool    `json:"admin_state_up,omitempty"`
-	Name                  string   `json:"name,omitempty"`
-	Shared                *bool    `json:"shared,omitempty"`
-	TenantID              string   `json:"tenant_id,omitempty"`
-	AvailabilityZoneHints []string `json:"availability_zone_hints,omitempty"`
+	AdminStateUp *bool  `json:"admin_state_up,omitempty"`
+	Name         string `json:"name,omitempty"`
+	Shared       *bool  `json:"shared,omitempty"`
+	TenantID     string `json:"tenant_id,omitempty"`
 }
 
-// ToNetworkCreateMap builds a request body from CreateOpts.
+// ToNetworkCreateMap casts a CreateOpts struct to a map.
 func (opts CreateOpts) ToNetworkCreateMap() (map[string]interface{}, error) {
 	return gophercloud.BuildRequestBody(opts, "network")
 }
@@ -95,20 +96,22 @@ func Create(c *gophercloud.ServiceClient, opts CreateOptsBuilder) (r CreateResul
 	return
 }
 
-// UpdateOptsBuilder allows extensions to add additional parameters to the
-// Update request.
+// UpdateOptsBuilder is the interface options structs have to satisfy in order
+// to be used in the main Update operation in this package. Since many
+// extensions decorate or modify the common logic, it is useful for them to
+// satisfy a basic interface in order for them to be used.
 type UpdateOptsBuilder interface {
 	ToNetworkUpdateMap() (map[string]interface{}, error)
 }
 
-// UpdateOpts represents options used to update a network.
+// UpdateOpts satisfies the UpdateOptsBuilder interface
 type UpdateOpts struct {
 	AdminStateUp *bool  `json:"admin_state_up,omitempty"`
 	Name         string `json:"name,omitempty"`
 	Shared       *bool  `json:"shared,omitempty"`
 }
 
-// ToNetworkUpdateMap builds a request body from UpdateOpts.
+// ToNetworkUpdateMap casts a UpdateOpts struct to a map.
 func (opts UpdateOpts) ToNetworkUpdateMap() (map[string]interface{}, error) {
 	return gophercloud.BuildRequestBody(opts, "network")
 }
@@ -133,8 +136,7 @@ func Delete(c *gophercloud.ServiceClient, networkID string) (r DeleteResult) {
 	return
 }
 
-// IDFromName is a convenience function that returns a network's ID, given
-// its name.
+// IDFromName is a convenience function that returns a network's ID given its name.
 func IDFromName(client *gophercloud.ServiceClient, name string) (string, error) {
 	count := 0
 	id := ""

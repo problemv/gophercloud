@@ -5,7 +5,7 @@ import (
 	"github.com/gophercloud/gophercloud/pagination"
 )
 
-// Rule represents a firewall rule.
+// Rule represents a firewall rule
 type Rule struct {
 	ID                   string `json:"id"`
 	Name                 string `json:"name,omitempty"`
@@ -50,8 +50,8 @@ func (r RulePage) IsEmpty() (bool, error) {
 	return len(is) == 0, err
 }
 
-// ExtractRules accepts a Page struct, specifically a RulePage struct,
-// and extracts the elements into a slice of Rule structs. In other words,
+// ExtractRules accepts a Page struct, specifically a RouterPage struct,
+// and extracts the elements into a slice of Router structs. In other words,
 // a generic collection is mapped into a relevant slice.
 func ExtractRules(r pagination.Page) ([]Rule, error) {
 	var s struct {
@@ -74,26 +74,22 @@ func (r commonResult) Extract() (*Rule, error) {
 	return s.Rule, err
 }
 
-// GetResult represents the result of a get operation. Call its Extract method
-// to interpret it as a Rule.
+// GetResult represents the result of a get operation.
 type GetResult struct {
 	commonResult
 }
 
-// UpdateResult represents the result of an update operation. Call its Extract
-// method to interpret it as a Rule.
+// UpdateResult represents the result of an update operation.
 type UpdateResult struct {
 	commonResult
 }
 
-// DeleteResult represents the result of a delete operation. Call its ExtractErr
-// method to determine if the request succeeded or failed.
+// DeleteResult represents the result of a delete operation.
 type DeleteResult struct {
 	gophercloud.ErrResult
 }
 
-// CreateResult represents the result of a create operation. Call its Extract
-// method to interpret it as a Rule.
+// CreateResult represents the result of a create operation.
 type CreateResult struct {
 	commonResult
 }

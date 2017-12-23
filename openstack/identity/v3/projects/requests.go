@@ -11,7 +11,7 @@ type ListOptsBuilder interface {
 	ToProjectListQuery() (string, error)
 }
 
-// ListOpts enables filtering of a list request.
+// ListOpts allows you to query the List method.
 type ListOpts struct {
 	// DomainID filters the response by a domain ID.
 	DomainID string `q:"domain_id"`
@@ -36,7 +36,7 @@ func (opts ListOpts) ToProjectListQuery() (string, error) {
 	return q.String(), err
 }
 
-// List enumerates the Projects to which the current token has access.
+// List enumerats the Projects to which the current token has access.
 func List(client *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
 	url := listURL(client)
 	if opts != nil {
@@ -63,7 +63,7 @@ type CreateOptsBuilder interface {
 	ToProjectCreateMap() (map[string]interface{}, error)
 }
 
-// CreateOpts represents parameters used to create a project.
+// CreateOpts allows you to modify the details included in the Create request.
 type CreateOpts struct {
 	// DomainID is the ID this project will belong under.
 	DomainID string `json:"domain_id,omitempty"`
@@ -112,7 +112,7 @@ type UpdateOptsBuilder interface {
 	ToProjectUpdateMap() (map[string]interface{}, error)
 }
 
-// UpdateOpts represents parameters to update a project.
+// UpdateOpts allows you to modify the details included in the Update request.
 type UpdateOpts struct {
 	// DomainID is the ID this project will belong under.
 	DomainID string `json:"domain_id,omitempty"`

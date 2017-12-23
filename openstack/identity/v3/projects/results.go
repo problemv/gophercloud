@@ -9,31 +9,27 @@ type projectResult struct {
 	gophercloud.Result
 }
 
-// GetResult is the result of a Get request. Call its Extract method to
-// interpret it as a Project.
+// GetResult temporarily contains the response from the Get call.
 type GetResult struct {
 	projectResult
 }
 
-// CreateResult is the result of a Create request. Call its Extract method to
-// interpret it as a Project.
+// CreateResult temporarily contains the reponse from the Create call.
 type CreateResult struct {
 	projectResult
 }
 
-// DeleteResult is the result of a Delete request. Call its ExtractErr method to
-// determine if the request succeeded or failed.
+// DeleteResult temporarily contains the response from the Delete call.
 type DeleteResult struct {
 	gophercloud.ErrResult
 }
 
-// UpdateResult is the result of an Update request. Call its Extract method to
-// interpret it as a Project.
+// UpdateResult temporarily contains the response from the Update call.
 type UpdateResult struct {
 	projectResult
 }
 
-// Project represents an OpenStack Identity Project.
+// Project is a base unit of ownership.
 type Project struct {
 	// IsDomain indicates whether the project is a domain.
 	IsDomain bool `json:"is_domain"`
@@ -83,8 +79,7 @@ func (r ProjectPage) NextPageURL() (string, error) {
 	return s.Links.Next, err
 }
 
-// ExtractProjects returns a slice of Projects contained in a single page of
-// results.
+// ExtractProjects returns a slice of Projects contained in a single page of results.
 func ExtractProjects(r pagination.Page) ([]Project, error) {
 	var s struct {
 		Projects []Project `json:"projects"`

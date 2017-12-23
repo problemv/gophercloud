@@ -11,35 +11,29 @@ type commonResult struct {
 
 // Extract is a function that accepts a result and extracts a network resource.
 func (r commonResult) Extract() (*Network, error) {
-	var s Network
+	var s struct {
+		Network *Network `json:"network"`
+	}
 	err := r.ExtractInto(&s)
-	return &s, err
+	return s.Network, err
 }
 
-func (r commonResult) ExtractInto(v interface{}) error {
-	return r.Result.ExtractIntoStructPtr(v, "network")
-}
-
-// CreateResult represents the result of a create operation. Call its Extract
-// method to interpret it as a Network.
+// CreateResult represents the result of a create operation.
 type CreateResult struct {
 	commonResult
 }
 
-// GetResult represents the result of a get operation. Call its Extract
-// method to interpret it as a Network.
+// GetResult represents the result of a get operation.
 type GetResult struct {
 	commonResult
 }
 
-// UpdateResult represents the result of an update operation. Call its Extract
-// method to interpret it as a Network.
+// UpdateResult represents the result of an update operation.
 type UpdateResult struct {
 	commonResult
 }
 
-// DeleteResult represents the result of a delete operation. Call its
-// ExtractErr method to determine if the request succeeded or failed.
+// DeleteResult represents the result of a delete operation.
 type DeleteResult struct {
 	gophercloud.ErrResult
 }
@@ -52,27 +46,21 @@ type Network struct {
 	// Human-readable name for the network. Might not be unique.
 	Name string `json:"name"`
 
-	// The administrative state of network. If false (down), the network does not
-	// forward packets.
+	// The administrative state of network. If false (down), the network does not forward packets.
 	AdminStateUp bool `json:"admin_state_up"`
 
 	// Indicates whether network is currently operational. Possible values include
-	// `ACTIVE', `DOWN', `BUILD', or `ERROR'. Plug-ins might define additional
-	// values.
+	// `ACTIVE', `DOWN', `BUILD', or `ERROR'. Plug-ins might define additional values.
 	Status string `json:"status"`
 
 	// Subnets associated with this network.
 	Subnets []string `json:"subnets"`
 
-	// Owner of network.
+	// Owner of network. Only admin users can specify a tenant_id other than its own.
 	TenantID string `json:"tenant_id"`
 
-	// Specifies whether the network resource can be accessed by any tenant.
+	// Specifies whether the network resource can be accessed by any tenant or not.
 	Shared bool `json:"shared"`
-
-	// Availability zone hints groups network nodes that run services like DHCP, L3, FW, and others.
-	// Used to make network resources highly available.
-	AvailabilityZoneHints []string `json:"availability_zone_hints"`
 }
 
 // NetworkPage is the page returned by a pager when traversing over a
@@ -105,11 +93,9 @@ func (r NetworkPage) IsEmpty() (bool, error) {
 // and extracts the elements into a slice of Network structs. In other words,
 // a generic collection is mapped into a relevant slice.
 func ExtractNetworks(r pagination.Page) ([]Network, error) {
-	var s []Network
-	err := ExtractNetworksInto(r, &s)
-	return s, err
-}
-
-func ExtractNetworksInto(r pagination.Page, v interface{}) error {
-	return r.(NetworkPage).Result.ExtractIntoSlicePtr(v, "networks")
+	var s struct {
+		Networks []Network `json:"networks"`
+	}
+	err := (r.(NetworkPage)).ExtractInto(&s)
+	return s.Networks, err
 }

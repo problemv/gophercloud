@@ -55,8 +55,8 @@ func (r PolicyPage) IsEmpty() (bool, error) {
 	return len(is) == 0, err
 }
 
-// ExtractPolicies accepts a Page struct, specifically a Policy struct,
-// and extracts the elements into a slice of Policy structs. In other words,
+// ExtractPolicies accepts a Page struct, specifically a RouterPage struct,
+// and extracts the elements into a slice of Router structs. In other words,
 // a generic collection is mapped into a relevant slice.
 func ExtractPolicies(r pagination.Page) ([]Policy, error) {
 	var s struct {
@@ -66,38 +66,32 @@ func ExtractPolicies(r pagination.Page) ([]Policy, error) {
 	return s.Policies, err
 }
 
-// GetResult represents the result of a get operation. Call its Extract
-// method to interpret it as a Policy.
+// GetResult represents the result of a get operation.
 type GetResult struct {
 	commonResult
 }
 
-// UpdateResult represents the result of an update operation. Call its
-// Extract method to interpret it as a Policy.
+// UpdateResult represents the result of an update operation.
 type UpdateResult struct {
 	commonResult
 }
 
-// DeleteResult represents the result of a delete operation. Call its
-// ExtractErr method to determine if the operation succeeded or failed.
+// DeleteResult represents the result of a delete operation.
 type DeleteResult struct {
 	gophercloud.ErrResult
 }
 
-// CreateResult represents the result of a create operation. Call its Extract
-// method to interpret it as a Policy.
+// CreateResult represents the result of a create operation.
 type CreateResult struct {
 	commonResult
 }
 
-// InsertRuleResult represents the result of an InsertRule operation. Call its
-// Extract method to interpret it as a Policy.
+// InsertRuleResult represents the result of an InsertRule operation.
 type InsertRuleResult struct {
 	commonResult
 }
 
-// RemoveRuleResult represents the result of a RemoveRule operation. Call its
-// Extract method to interpret it as a Policy.
+// RemoveRuleResult represents the result of a RemoveRule operation.
 type RemoveRuleResult struct {
 	commonResult
 }
