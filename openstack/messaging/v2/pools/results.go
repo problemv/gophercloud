@@ -42,12 +42,11 @@ type PoolPage struct {
 }
 
 type Pool struct {
-	TTL 	int 					`json:"ttl"`
-	Delay 	int 					`json:"delay"`
-	Body 	map[string]interface{}	`json:"body"`
-	Age		int						`json:"age"`
-	Href	string					`json:"href"`
-	ID		string					`json:"id"`
+	Href 	string 					`json:"href"`
+	Group 	string 					`json:"group"`
+	Name 	string					`json:"name"`
+	Weight	int						`json:"weight"`
+	URI		string					`json:"uri"`
 }
 
 func (r commonResult) ExtractPool() (*Pool, error) {

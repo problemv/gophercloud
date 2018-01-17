@@ -7,7 +7,7 @@ import (
 
 // CreateOptsBuilder Builder.
 type CreateOptsBuilder interface {
-	ToQueueCreateMap() (map[string]interface{}, error)
+	ToMessageCreateMap() (map[string]interface{}, error)
 }
 
 // CreateOpts params
@@ -25,7 +25,7 @@ func (opts CreateOpts) ToMessageCreateMap() (map[string]interface{}, error) {
 }
 
 func Create(client *gophercloud.ServiceClient, queueName string, messageId string, opts CreateOptsBuilder) (r CreateResult) {
-	b, err := opts.ToQueueCreateMap()
+	b, err := opts.ToMessageCreateMap()
 	if err != nil {
 		r.Err = err
 		return
@@ -38,7 +38,7 @@ func Create(client *gophercloud.ServiceClient, queueName string, messageId strin
 
 // ListOptsBuilder Builder.
 type ListOptsBuilder interface {
-	ToQueueListQuery() (string, error)
+	ToMessageListQuery() (string, error)
 }
 
 // ListOpts params
