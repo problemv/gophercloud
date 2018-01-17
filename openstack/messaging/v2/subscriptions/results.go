@@ -3,7 +3,6 @@ package subscriptions
 import (
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/pagination"
-	"github.com/gophercloud/gophercloud/openstack/objectstorage/v1/accounts"
 )
 
 // commonResult is the response of a base result.

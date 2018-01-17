@@ -36,7 +36,7 @@ type UpdateResult struct {
 	commonResult
 }
 
-// ClusterPage contains a single page of all clusters from a ListDetails call.
+// MessagePage contains a single page of all clusters from a ListDetails call.
 type MessagePage struct {
 	pagination.LinkedPageBase
 }
@@ -64,23 +64,23 @@ func (r commonResult) Extract() (*Message, error) {
 
 func ExtractMessages(r pagination.Page) ([]Message, error) {
 	var s struct {
-		Clusters []Message `json:"messages"`
+		Messages []Message `json:"messages"`
 	}
 	err := (r.(MessagePage)).ExtractInto(&s)
-	return s.Clusters, err
+	return s.Messages, err
 }
 
-// IsEmpty determines if a ClusterPage contains any results.
+// IsEmpty determines if a MessagePage contains any results.
 func (page MessagePage) IsEmpty() (bool, error) {
-	clusters, err := ExtractMessages(page)
-	return len(clusters) == 0, err
+	messages, err := ExtractMessages(page)
+	return len(messages) == 0, err
 }
 
 type MessageResult struct {
-	Cluster string `json:"messages"`
+	Message string `json:"messages"`
 }
 
-// Extract provides access to the individual Cluster returned by the Get and
+// Extract provides access to the individual Message returned by the Get and
 // Create functions.
 func (r commonResult) ExtractMessages() (s *MessageResult, err error) {
 	err = r.ExtractInto(&s)

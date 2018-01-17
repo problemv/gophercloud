@@ -71,8 +71,8 @@ func (opts ListOpts) ToQueueListQuery() (string, error) {
 	return q.String(), err
 }
 
-// ListQueues instructs OpenStack to provide a list of queues.
-func ListQueues(client *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
+// List instructs OpenStack to provide a list of queues.
+func List(client *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
 	url := listURL(client)
 	if opts != nil {
 		query, err := opts.ToQueueListQuery()
