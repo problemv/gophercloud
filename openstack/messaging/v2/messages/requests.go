@@ -76,7 +76,7 @@ func ListMessages(client *gophercloud.ServiceClient, opts ListOptsBuilder, queue
 	}
 
 	return pagination.NewPager(client, url, func(r pagination.PageResult) pagination.Page {
-		return QueuePage{pagination.LinkedPageBase{PageResult: r}}
+		return MessagePage{pagination.LinkedPageBase{PageResult: r}}
 	})
 }
 

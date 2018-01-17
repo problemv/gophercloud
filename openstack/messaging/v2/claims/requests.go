@@ -50,7 +50,7 @@ type UpdateOptsBuilder interface {
 type UpdateClaimOpts struct {
 	TTL int `json:"ttl,omitempty"`
 
-	Grace int `json:"TTL,omitempty"`
+	Grace int `json:"grace,omitempty"`
 }
 
 // ToQueueUpdateMap assembles a request body based on the contents of
@@ -76,6 +76,6 @@ func Update(client *gophercloud.ServiceClient, queueName string, claimId string,
 }
 
 func Delete(client *gophercloud.ServiceClient, queueName string, claimId string,) (r DeleteResult) {
-	_, r.Err = client.Delete(deleteURL(client, queueName), nil)
+	_, r.Err = client.Delete(claimURL(client, queueName, claimId), nil)
 	return
 }
