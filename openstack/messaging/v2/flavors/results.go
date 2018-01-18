@@ -49,16 +49,14 @@ type Flavor struct {
 	Capabilities	[]string	`json:"capabilities"`
 }
 
-func (r commonResult) ExtractFlavor() (*Flavor, error) {
-	var s struct {
-		Flavor *Flavor `json:"pool"`
-	}
-	err := r.ExtractInto(&s)
-	return s.Flavor, err
-}
-
 func (r commonResult) Extract() (*Flavor, error) {
 	return r.ExtractFlavor()
+}
+
+func (r commonResult) ExtractFlavor() (*Flavor, error) {
+	flavor := Flavor{}
+	err := r.ExtractInto(&flavor)
+	return &flavor, err
 }
 
 func ExtractFlavors(r pagination.Page) ([]Flavor, error) {
@@ -79,10 +77,7 @@ type FlavorResult struct {
 	Flavor string `json:"flavors"`
 }
 
-// Extract provides access to the individual Pool returned by the Get and
-// Create functions.
 func (r commonResult) ExtractFlavors() (s *FlavorResult, err error) {
 	err = r.ExtractInto(&s)
 	return s, err
 }
-

@@ -2,7 +2,6 @@ package claims
 
 import (
 	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/pagination"
 )
 
 // CreateOptsBuilder Builder.

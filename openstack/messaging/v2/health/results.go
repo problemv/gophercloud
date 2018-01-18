@@ -42,11 +42,9 @@ type Health struct {
 }
 
 func (r commonResult) ExtractHealth() (*Health, error) {
-	var s struct {
-		Health *Health `json:"health"`
-	}
-	err := r.ExtractInto(&s)
-	return s.Health, err
+	health := Health{}
+	err := r.ExtractInto(&health)
+	return &health, err
 }
 
 func (r commonResult) Extract() (*Health, error) {

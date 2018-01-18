@@ -68,7 +68,7 @@ func (opts ListOpts) ToMessageListQuery() (string, error) {
 func ListMessages(client *gophercloud.ServiceClient, opts ListOptsBuilder, queueName string) pagination.Pager {
 	url := actionURL(client, queueName, "messages")
 	if opts != nil {
-		query, err := opts.ToQueueListQuery()
+		query, err := opts.ToMessageListQuery()
 		if err != nil {
 			return pagination.Pager{Err: err}
 		}

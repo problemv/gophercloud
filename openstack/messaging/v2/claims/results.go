@@ -2,7 +2,6 @@ package claims
 
 import (
 	"github.com/gophercloud/gophercloud"
-	"github.com/gophercloud/gophercloud/pagination"
 )
 
 // commonResult is the response of a base result.
@@ -36,54 +35,19 @@ type UpdateResult struct {
 	commonResult
 }
 
-// ClusterPage contains a single page of all clusters from a ListDetails call.
-type ClaimPage struct {
-	pagination.LinkedPageBase
-}
-
 type Claim struct {
-	Body 		map[string]interface{}	`json:"body"`
 	Age			int						`json:"age"`
 	Href		string					`json:"href"`
 	TTL			int						`json:"ttl"`
-	Messages 	map[string]interface{}	`json:"messages"`
-	Grace		int						`json:"grace"`
+	Messages 	[]interface{}			`json:"messages"`
 }
 
 func (r commonResult) ExtractClaim() (*Claim, error) {
-	var s struct {
-		Claim *Claim `json:"claim"`
-	}
-	err := r.ExtractInto(&s)
-	return s.Claim, err
+	claim := Claim{}
+	err := r.ExtractInto(&claim)
+	return &claim, err
 }
 
 func (r commonResult) Extract() (*Claim, error) {
 	return r.ExtractClaim()
-}
-
-// ExtractCluster provides access to the list of clusters in a page acquired from the ListDetail operation.
-func ExtractClaims(r pagination.Page) ([]Cluster, error) {
-	var s struct {
-		Claims []Claim `json:"claims"`
-	}
-	err := (r.(ClaimPage)).ExtractInto(&s)
-	return s.Claims, err
-}
-
-// IsEmpty determines if a ClusterPage contains any results.
-func (page ClaimPage) IsEmpty() (bool, error) {
-	clusters, err := ExtractClaims(page)
-	return len(clusters) == 0, err
-}
-
-type ClusterResult struct {
-	Claim string `json:"claims"`
-}
-
-// Extract provides access to the individual Cluster returned by the Get and
-// Create functions.
-func (r commonResult) ExtractClaims() (s *ClusterResult, err error) {
-	err = r.ExtractInto(&s)
-	return s, err
 }

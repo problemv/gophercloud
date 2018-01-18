@@ -11,6 +11,39 @@ import (
 	fake "github.com/gophercloud/gophercloud/testhelper/client"
 )
 
+func HandleGetSuccessfully(t *testing.T) {
+	th.Mux.HandleFunc("/",
+		func(w http.ResponseWriter, r *http.Request) {
+			th.TestMethod(t, r, "GET")
+			th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+
+			w.Header().Add("Content-Type", "application/json")
+			var GetOutput = fmt.Sprintf(`
+		{
+    "messages": [
+        {
+            "body": {
+                "current_bytes": "0",
+                "event": "BackupProgress",
+                "total_bytes": "99614720"
+            },
+            "age": 482,
+            "href": "/v2/queues/beijing/messages/578edfe6508f153f256f717b",
+            "id": "578edfe6508f153f256f717b",
+            "ttl": 3600
+        }
+	],
+	"links": [
+			{
+				"href": "/v2/queues/beijing/messages?marker=17&echo=true",
+				"rel": "next"
+			}
+    ]
+		}`)
+			fmt.Fprintf(w, GetOutput)
+		})
+}
+
 func TestListMessages(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
@@ -35,9 +68,26 @@ func TestListMessages(t *testing.T) {
             "href": "/v2/queues/beijing/messages/578edfe6508f153f256f717b",
             "id": "578edfe6508f153f256f717b",
             "ttl": 3600
+        },
+        {
+            "body": {
+                "current_bytes": "0",
+                "event": "BackupProgress",
+                "total_bytes": "99614720"
+            },
+            "age": 456,
+            "href": "/v2/queues/beijing/messages/578ee000508f153f256f717d",
+            "id": "578ee000508f153f256f717d",
+            "ttl": 3600
         }
-	]
-		}`)
+    ],
+    "links": [
+        {
+            "href": "/v2/queues/beijing/messages?marker=17&echo=true",
+            "rel": "next"
+        }
+    ]
+}`)
 	})
 
 	count := 0
@@ -52,7 +102,7 @@ func TestListMessages(t *testing.T) {
 
 		expected := []messages.Message{
 			{
-				Body:	map[string]interface{}{},
+				Body:	map[string]interface {}{"event":"BackupProgress", "total_bytes":"99614720", "current_bytes":"0"},
 				Age:	482,
 				Href:	"/v2/queues/beijing/messages/578edfe6508f153f256f717b",
 				ID:		"578edfe6508f153f256f717b",

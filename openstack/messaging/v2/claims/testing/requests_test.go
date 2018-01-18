@@ -6,15 +6,48 @@ import (
 	"github.com/gophercloud/gophercloud/openstack/messaging/v2/claims"
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fake "github.com/gophercloud/gophercloud/testhelper/client"
-	"github.com/gophercloud/gophercloud/testhelper/fixture"
+	"fmt"
+	"net/http"
 )
 
 func TestGet(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
-	fixture.SetupHandler(t, "/queues/fake_queue/claims/12345", "GET", "", GetDSResp, 200)
+	var MockResp =`
+	{
+  		"age": 57,
+  		"href": "/v2/queues/demoqueue/claims/51db7067821e727dc24df754",
+  		"messages": [
+    			{
+      				"body": {
+        			"event": "BackupStarted"
+      			},
+      			"href": "/v2/queues/demoqueue/messages/51db6f78c508f17ddc924357?claim_id=51db7067821e727dc24df754"
+    		}
+  		],
+  		"ttl": 300
+	}`
 
-	ds, err := claims.Get(fake.ServiceClient(), "fake_queue", "12345").Extract()
+	th.Mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		th.TestMethod(t, r, "GET")
+		th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
+
+		w.Header().Add("Content-Type", "application/json")
+		fmt.Fprintf(w, MockResp)
+	})
+
+	expected := &claims.Claim{
+			Age:		57,
+			Href:		"/v2/queues/demoqueue/claims/51db7067821e727dc24df754",
+			Messages:	[]interface {}{
+				map[string]interface {}{
+					"href":"/v2/queues/demoqueue/messages/51db6f78c508f17ddc924357?claim_id=51db7067821e727dc24df754",
+					"body": map[string]interface {}{
+						"event":"BackupStarted"}}},
+			TTL:		300,
+	}
+
+	claim, err := claims.Get(fake.ServiceClient(), "fake_queue", "12345").Extract()
 	th.AssertNoErr(t, err)
-	th.AssertDeepEquals(t, &ExampleDatastore, ds)
+	th.AssertDeepEquals(t, expected, claim)
 }

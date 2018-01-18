@@ -11,7 +11,7 @@ import (
 	fake "github.com/gophercloud/gophercloud/testhelper/client"
 )
 
-func TestListSubscriptions(t *testing.T) {
+func TestList(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 

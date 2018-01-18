@@ -38,7 +38,7 @@ func Create(client *gophercloud.ServiceClient, queueName string, opts CreateOpts
 
 // ListOptsBuilder Builder.
 type ListOptsBuilder interface {
-	ToQueueListQuery() (string, error)
+	ToSubscriptionListQuery() (string, error)
 }
 
 // ListOpts params
@@ -50,7 +50,7 @@ type ListOpts struct {
 	Marker string `q:"marker,omitempty"`
 }
 
-func (opts ListOpts) ToMessageListQuery() (string, error) {
+func (opts ListOpts) ToSubscriptionListQuery() (string, error) {
 	q, err := gophercloud.BuildQueryString(opts)
 	return q.String(), err
 }
@@ -59,7 +59,7 @@ func (opts ListOpts) ToMessageListQuery() (string, error) {
 func List(client *gophercloud.ServiceClient, opts ListOptsBuilder, queueName string) pagination.Pager {
 	url := actionURL(client, queueName, "subscriptions")
 	if opts != nil {
-		query, err := opts.ToQueueListQuery()
+		query, err := opts.ToSubscriptionListQuery()
 		if err != nil {
 			return pagination.Pager{Err: err}
 		}
