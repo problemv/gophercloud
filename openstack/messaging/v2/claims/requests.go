@@ -15,7 +15,7 @@ type CreateOpts struct {
 
 	TTL int `json:"ttl,omitempty"`
 
-	Grace string `json:"grace,omitempty"`
+	Grace int `json:"grace,omitempty"`
 }
 
 func (opts CreateOpts) ToClaimCreateMap() (map[string]interface{}, error) {

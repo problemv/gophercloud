@@ -27,7 +27,7 @@ func (opts CreateOpts) ToPoolCreateMap() (map[string]interface{}, error) {
 }
 
 // Create uses put instead of post
-func Create(client *gophercloud.ServiceClient, opts CreateOptsBuilder, poolName string) (r CreateResult) {
+func Create(client *gophercloud.ServiceClient, poolName string, opts CreateOptsBuilder) (r CreateResult) {
 	b, err := opts.ToPoolCreateMap()
 	if err != nil {
 		r.Err = err

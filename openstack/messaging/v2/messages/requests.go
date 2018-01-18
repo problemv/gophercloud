@@ -16,7 +16,7 @@ type CreateOpts struct {
 
 	Delay int `json:"delay,omitempty"`
 
-	Body string `json:"body" required:"true"`
+	Body map[string]interface{} `json:"body" required:"true"`
 }
 
 // ToMessageCreateMap constructs a request body from CreateOpts.
@@ -24,13 +24,13 @@ func (opts CreateOpts) ToMessageCreateMap() (map[string]interface{}, error) {
 	return gophercloud.BuildRequestBody(opts, "messages")
 }
 
-func Create(client *gophercloud.ServiceClient, queueName string, messageId string, opts CreateOptsBuilder) (r CreateResult) {
+func Create(client *gophercloud.ServiceClient, queueName string, opts CreateOptsBuilder) (r CreateResult) {
 	b, err := opts.ToMessageCreateMap()
 	if err != nil {
 		r.Err = err
 		return
 	}
-	_, r.Err = client.Post(messageURL(client, queueName, messageId), b, &r.Body, &gophercloud.RequestOpts{
+	_, r.Err = client.Post(actionURL(client, queueName, "messages"), b, &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{201},
 	})
 	return

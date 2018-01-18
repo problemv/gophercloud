@@ -16,7 +16,7 @@ type CreateOpts struct {
 
 	DeadLetterQueueMessageTTL int `json:"_dead_letter_queue_messages_ttl,omitempty"`
 
-	DefaultMessageDelay string `json:"_default_message_delay,omitempty"`
+	DefaultMessageDelay int `json:"_default_message_delay,omitempty"`
 
 	DefaultMessageTTL int `json:"_default_message_ttl" required:"true"`
 
