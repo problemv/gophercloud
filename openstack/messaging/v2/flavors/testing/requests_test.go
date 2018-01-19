@@ -43,7 +43,7 @@ func TestGet(t *testing.T) {
 		Name:			"testflavor",
 	}
 
-	flavor, err := flavors.Get(fake.ServiceClient(), "fake_flavor").Extract()
+	flavor, err := flavors.Get(fake.ServiceClient(), "fake_flavor", "1234").Extract()
 	th.AssertNoErr(t, err)
 	th.AssertDeepEquals(t, expected, flavor)
 }

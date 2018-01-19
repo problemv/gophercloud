@@ -35,7 +35,7 @@ func TestListQueues(t *testing.T) {
 
 	count := 0
 
-	queues.List(fake.ServiceClient(), queues.ListOpts{}).EachPage(func(page pagination.Page) (bool, error) {
+	queues.List(fake.ServiceClient(), "1234", queues.ListOpts{}).EachPage(func(page pagination.Page) (bool, error) {
 		count++
 		actual, err := queues.ExtractQueues(page)
 		if err != nil {

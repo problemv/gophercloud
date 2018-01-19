@@ -27,7 +27,7 @@ func (opts CreateOpts) ToPoolCreateMap() (map[string]interface{}, error) {
 }
 
 // Create uses put instead of post
-func Create(client *gophercloud.ServiceClient, poolName string, opts CreateOptsBuilder) (r CreateResult) {
+func Create(client *gophercloud.ServiceClient, poolName string, clientId string, opts CreateOptsBuilder) (r CreateResult) {
 	b, err := opts.ToPoolCreateMap()
 	if err != nil {
 		r.Err = err
@@ -35,6 +35,7 @@ func Create(client *gophercloud.ServiceClient, poolName string, opts CreateOptsB
 	}
 	_, r.Err = client.Put(poolURL(client, poolName), b, &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{200, 201, 202},
+		MoreHeaders: map[string]string{"Client-ID": clientId,},
 	})
 	return
 }
@@ -97,7 +98,7 @@ func (opts UpdateOpts) ToPoolUpdateMap() (map[string]interface{}, error) {
 }
 
 // Update implements profile updated request.
-func Update(client *gophercloud.ServiceClient, poolName string, opts UpdateOptsBuilder) (r UpdateResult) {
+func Update(client *gophercloud.ServiceClient, poolName string, clientId string, opts UpdateOptsBuilder) (r UpdateResult) {
 	b, err := opts.ToPoolUpdateMap()
 	if err != nil {
 		r.Err = err
@@ -105,16 +106,21 @@ func Update(client *gophercloud.ServiceClient, poolName string, opts UpdateOptsB
 	}
 	_, r.Err = client.Patch(poolURL(client, poolName), b, &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{200},
+		MoreHeaders: map[string]string{"Client-ID": clientId,},
 	})
 	return
 }
 
-func Get(client *gophercloud.ServiceClient, poolName string) (r GetResult) {
-	_, r.Err = client.Get(poolURL(client, poolName), &r.Body, nil)
+func Get(client *gophercloud.ServiceClient, poolName string, clientId string,) (r GetResult) {
+	_, r.Err = client.Get(poolURL(client, poolName), &r.Body, &gophercloud.RequestOpts{
+		MoreHeaders: map[string]string{"Client-ID": clientId,},
+	})
 	return
 }
 
-func Delete(client *gophercloud.ServiceClient, poolName string) (r DeleteResult) {
-	_, r.Err = client.Delete(poolURL(client, poolName), nil)
+func Delete(client *gophercloud.ServiceClient, poolName string, clientId string,) (r DeleteResult) {
+	_, r.Err = client.Delete(poolURL(client, poolName), &gophercloud.RequestOpts{
+		MoreHeaders: map[string]string{"Client-ID": clientId,},
+	})
 	return
 }

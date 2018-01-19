@@ -3,6 +3,7 @@ package queues
 import (
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/pagination"
+	"fmt"
 )
 
 // CreateOptsBuilder Builder.
@@ -35,7 +36,7 @@ func (opts CreateOpts) ToQueueCreateMap() (map[string]interface{}, error) {
 }
 
 // Create requests the creation of a new queue.
-func Create(client *gophercloud.ServiceClient, queueName string, opts CreateOptsBuilder) (r CreateResult) {
+func Create(client *gophercloud.ServiceClient, queueName string, clientId string, opts CreateOptsBuilder) (r CreateResult) {
 	b, err := opts.ToQueueCreateMap()
 	if err != nil {
 		r.Err = err
@@ -43,7 +44,8 @@ func Create(client *gophercloud.ServiceClient, queueName string, opts CreateOpts
 	}
 	// Zaqar uses PUT instead of Create for creating queues
 	_, r.Err = client.Put(updateURL(client, queueName), b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200},
+		OkCodes: []int{201},
+		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 	return
 }
@@ -72,7 +74,8 @@ func (opts ListOpts) ToQueueListQuery() (string, error) {
 }
 
 // List instructs OpenStack to provide a list of queues.
-func List(client *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
+func List(client *gophercloud.ServiceClient, clientId string, opts ListOptsBuilder) pagination.Pager {
+	headers := map[string]string{"Client-ID": clientId}
 	url := listURL(client)
 	if opts != nil {
 		query, err := opts.ToQueueListQuery()
@@ -82,9 +85,11 @@ func List(client *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pa
 		url += query
 	}
 
-	return pagination.NewPager(client, url, func(r pagination.PageResult) pagination.Page {
+	pager := pagination.NewPager(client, url, func(r pagination.PageResult) pagination.Page {
 		return QueuePage{pagination.LinkedPageBase{PageResult: r}}
 	})
+	pager.Headers = headers
+	return pager
 }
 
 // UpdateOpts implements UpdateOpts
@@ -108,7 +113,7 @@ func (opts UpdateQueueOpts) ToQueueUpdateMap() (map[string]interface{}, error) {
 	return b, nil
 }
 
-func Update(client *gophercloud.ServiceClient, queueName string, opts UpdateOptsBuilder) (r UpdateResult) {
+func Update(client *gophercloud.ServiceClient, queueName string, clientId string, opts UpdateOptsBuilder) (r UpdateResult) {
 	b, err := opts.ToQueueUpdateMap()
 	if err != nil {
 		r.Err = err
@@ -116,18 +121,16 @@ func Update(client *gophercloud.ServiceClient, queueName string, opts UpdateOpts
 	}
 	_, r.Err = client.Patch(updateURL(client, queueName), b, &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{201, 204},
+		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 	return
 }
 
-func Get(client *gophercloud.ServiceClient, queueName string) (r GetResult) {
-	_, r.Err = client.Get(getURL(client, queueName), &r.Body, nil)
-	return
-}
-
 // Delete deletes the specified queue.
-func Delete(client *gophercloud.ServiceClient, queueName string) (r DeleteResult) {
-	_, r.Err = client.Delete(deleteURL(client, queueName), nil)
+func Delete(client *gophercloud.ServiceClient, queueName string, clientId string) (r DeleteResult) {
+	_, r.Err = client.Request("DELETE", deleteURL(client, queueName),  &gophercloud.RequestOpts{
+		MoreHeaders: map[string]string{"Client-ID": clientId,},
+	})
 	return
 }
 
@@ -155,7 +158,7 @@ func (opts ShareOpts) ToShareQueueMap() (map[string]interface{}, error) {
 	return b, nil
 }
 
-func Share(client *gophercloud.ServiceClient, queueName string, opts ShareOptsBuilder) (r PostResult) {
+func Share(client *gophercloud.ServiceClient, queueName string, clientId string, opts ShareOptsBuilder) (r PostResult) {
 	b, err := opts.ToShareQueueMap()
 	if err != nil {
 		r.Err = err
@@ -163,6 +166,7 @@ func Share(client *gophercloud.ServiceClient, queueName string, opts ShareOptsBu
 	}
 	_, r.Err = client.Post(actionURL(client, queueName, "share"), b, &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{200},
+		MoreHeaders: map[string]string{"Client-ID": clientId,},
 	})
 	return
 }
@@ -183,7 +187,7 @@ func (opts ShareOpts) ToPurgeQueueMap() (map[string]interface{}, error) {
 	return b, nil
 }
 
-func Purge(client *gophercloud.ServiceClient, queueName string, opts ShareOptsBuilder) (r PostResult) {
+func Purge(client *gophercloud.ServiceClient, queueName string, clientId string, opts ShareOptsBuilder) (r PostResult) {
 	b, err := opts.ToShareQueueMap()
 	if err != nil {
 		r.Err = err
@@ -191,6 +195,7 @@ func Purge(client *gophercloud.ServiceClient, queueName string, opts ShareOptsBu
 	}
 	_, r.Err = client.Post(actionURL(client, queueName, "purge"), b, &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{204},
+		MoreHeaders: map[string]string{"Client-ID": clientId,},
 	})
 	return
 }

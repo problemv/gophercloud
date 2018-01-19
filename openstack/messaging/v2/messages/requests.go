@@ -24,7 +24,7 @@ func (opts CreateOpts) ToMessageCreateMap() (map[string]interface{}, error) {
 	return gophercloud.BuildRequestBody(opts, "messages")
 }
 
-func Create(client *gophercloud.ServiceClient, queueName string, opts CreateOptsBuilder) (r CreateResult) {
+func Create(client *gophercloud.ServiceClient, queueName string, clientId string, opts CreateOptsBuilder) (r CreateResult) {
 	b, err := opts.ToMessageCreateMap()
 	if err != nil {
 		r.Err = err
@@ -32,6 +32,7 @@ func Create(client *gophercloud.ServiceClient, queueName string, opts CreateOpts
 	}
 	_, r.Err = client.Post(actionURL(client, queueName, "messages"), b, &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{201},
+		MoreHeaders: map[string]string{"Client-ID": clientId,},
 	})
 	return
 }
@@ -65,7 +66,7 @@ func (opts ListOpts) ToMessageListQuery() (string, error) {
 }
 
 // ListMessages instructs OpenStack to provide a list of messages.
-func ListMessages(client *gophercloud.ServiceClient, opts ListOptsBuilder, queueName string) pagination.Pager {
+func ListMessages(client *gophercloud.ServiceClient, queueName string, clientId string, opts ListOptsBuilder) pagination.Pager {
 	url := actionURL(client, queueName, "messages")
 	if opts != nil {
 		query, err := opts.ToMessageListQuery()
@@ -80,17 +81,23 @@ func ListMessages(client *gophercloud.ServiceClient, opts ListOptsBuilder, queue
 	})
 }
 
-func DeleteMessages(client *gophercloud.ServiceClient, queueName string) (r DeleteResult) {
-	_, r.Err = client.Delete(actionURL(client, queueName, "messages"), nil)
+func DeleteMessages(client *gophercloud.ServiceClient, queueName string, clientId string) (r DeleteResult) {
+	_, r.Err = client.Delete(actionURL(client, queueName, "messages"), &gophercloud.RequestOpts{
+		MoreHeaders: map[string]string{"Client-ID": clientId,},
+	})
 	return
 }
 
-func GetMessage(client *gophercloud.ServiceClient, queueName string, messageId string) (r GetResult) {
-	_, r.Err = client.Get(messageURL(client, queueName, messageId), &r.Body, nil)
+func GetMessage(client *gophercloud.ServiceClient, queueName string, messageId string, clientId string) (r GetResult) {
+	_, r.Err = client.Get(messageURL(client, queueName, messageId), &r.Body, &gophercloud.RequestOpts{
+		MoreHeaders: map[string]string{"Client-ID": clientId,},
+	})
 	return
 }
 
-func DeleteMessage(client *gophercloud.ServiceClient, queueName string, messageId string) (r DeleteResult) {
-	_, r.Err = client.Delete(messageURL(client, queueName, messageId), nil)
+func DeleteMessage(client *gophercloud.ServiceClient, queueName string, messageId string, clientId string) (r DeleteResult) {
+	_, r.Err = client.Delete(messageURL(client, queueName, messageId), &gophercloud.RequestOpts{
+		MoreHeaders: map[string]string{"Client-ID": clientId,},
+	})
 	return
 }

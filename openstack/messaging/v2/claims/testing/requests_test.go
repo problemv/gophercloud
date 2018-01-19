@@ -47,7 +47,7 @@ func TestGet(t *testing.T) {
 			TTL:		300,
 	}
 
-	claim, err := claims.Get(fake.ServiceClient(), "fake_queue", "12345").Extract()
+	claim, err := claims.Get(fake.ServiceClient(), "fake_queue", "1234").Extract()
 	th.AssertNoErr(t, err)
 	th.AssertDeepEquals(t, expected, claim)
 }

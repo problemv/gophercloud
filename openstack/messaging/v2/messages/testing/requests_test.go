@@ -11,39 +11,6 @@ import (
 	fake "github.com/gophercloud/gophercloud/testhelper/client"
 )
 
-func HandleGetSuccessfully(t *testing.T) {
-	th.Mux.HandleFunc("/",
-		func(w http.ResponseWriter, r *http.Request) {
-			th.TestMethod(t, r, "GET")
-			th.TestHeader(t, r, "X-Auth-Token", fake.TokenID)
-
-			w.Header().Add("Content-Type", "application/json")
-			var GetOutput = fmt.Sprintf(`
-		{
-    "messages": [
-        {
-            "body": {
-                "current_bytes": "0",
-                "event": "BackupProgress",
-                "total_bytes": "99614720"
-            },
-            "age": 482,
-            "href": "/v2/queues/beijing/messages/578edfe6508f153f256f717b",
-            "id": "578edfe6508f153f256f717b",
-            "ttl": 3600
-        }
-	],
-	"links": [
-			{
-				"href": "/v2/queues/beijing/messages?marker=17&echo=true",
-				"rel": "next"
-			}
-    ]
-		}`)
-			fmt.Fprintf(w, GetOutput)
-		})
-}
-
 func TestListMessages(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
@@ -92,7 +59,7 @@ func TestListMessages(t *testing.T) {
 
 	count := 0
 
-	messages.ListMessages(fake.ServiceClient(), messages.ListOpts{}, "fake_queue").EachPage(func(page pagination.Page) (bool, error) {
+	messages.ListMessages(fake.ServiceClient(),"fake_queue", "1234", nil).EachPage(func(page pagination.Page) (bool, error) {
 		count++
 		actual, err := messages.ExtractMessages(page)
 		if err != nil {

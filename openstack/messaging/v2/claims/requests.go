@@ -22,7 +22,7 @@ func (opts CreateOpts) ToClaimCreateMap() (map[string]interface{}, error) {
 	return gophercloud.BuildRequestBody(opts, "")
 }
 
-func Create(client *gophercloud.ServiceClient, queueName string, opts CreateOptsBuilder) (r CreateResult) {
+func Create(client *gophercloud.ServiceClient, queueName string, clientId string, opts CreateOptsBuilder) (r CreateResult) {
 	b, err := opts.ToClaimCreateMap()
 	if err != nil {
 		r.Err = err
@@ -30,6 +30,7 @@ func Create(client *gophercloud.ServiceClient, queueName string, opts CreateOpts
 	}
 	_, r.Err = client.Post(actionURL(client, queueName, "claims"), b, &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{201, 204},
+		MoreHeaders: map[string]string{"Client-ID": clientId,},
 	})
 	return
 }
@@ -62,7 +63,7 @@ func (opts UpdateClaimOpts) ToClaimUpdateMap() (map[string]interface{}, error) {
 	return b, nil
 }
 
-func Update(client *gophercloud.ServiceClient, queueName string, claimId string, opts UpdateOptsBuilder) (r UpdateResult) {
+func Update(client *gophercloud.ServiceClient, queueName string, claimId string, clientId string, opts UpdateOptsBuilder) (r UpdateResult) {
 	b, err := opts.ToClaimUpdateMap()
 	if err != nil {
 		r.Err = err
@@ -70,11 +71,14 @@ func Update(client *gophercloud.ServiceClient, queueName string, claimId string,
 	}
 	_, r.Err = client.Patch(claimURL(client, queueName, claimId), b, &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{204},
+		MoreHeaders: map[string]string{"Client-ID": clientId,},
 	})
 	return
 }
 
-func Delete(client *gophercloud.ServiceClient, queueName string, claimId string,) (r DeleteResult) {
-	_, r.Err = client.Delete(claimURL(client, queueName, claimId), nil)
+func Delete(client *gophercloud.ServiceClient, queueName string, clientId string, claimId string,) (r DeleteResult) {
+	_, r.Err = client.Delete(claimURL(client, queueName, claimId), &gophercloud.RequestOpts{
+		MoreHeaders: map[string]string{"Client-ID": clientId,},
+	})
 	return
 }
