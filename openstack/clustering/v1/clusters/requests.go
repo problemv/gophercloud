@@ -27,6 +27,9 @@ type CreateOpts struct {
 	MaxSize int `json:"max_size,omitempty"`
 
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
+
+        // Config The structured config associated with the cluster.
+        Config map[string]interface{} `json:"config,omitempty"`
 }
 
 // ToClusterCreateMap constructs a request body from CreateOpts.
