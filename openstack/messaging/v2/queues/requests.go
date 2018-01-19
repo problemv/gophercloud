@@ -3,7 +3,6 @@ package queues
 import (
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/pagination"
-	"fmt"
 )
 
 // CreateOptsBuilder Builder.

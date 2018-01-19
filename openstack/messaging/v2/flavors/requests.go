@@ -55,7 +55,8 @@ func (opts ListOpts) ToFlavorListQuery() (string, error) {
 }
 
 // List instructs OpenStack to provide a list of pools.
-func List(client *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
+func List(client *gophercloud.ServiceClient, clientId string, opts ListOptsBuilder) pagination.Pager {
+	headers := map[string]string{"Client-ID": clientId}
 	url := commonURL(client)
 	if opts != nil {
 		query, err := opts.ToFlavorListQuery()
@@ -65,9 +66,11 @@ func List(client *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pa
 		url += query
 	}
 
-	return pagination.NewPager(client, url, func(r pagination.PageResult) pagination.Page {
+	pager := pagination.NewPager(client, url, func(r pagination.PageResult) pagination.Page {
 		return FlavorPage{pagination.LinkedPageBase{PageResult: r}}
 	})
+	pager.Headers = headers
+	return pager
 }
 
 type UpdateOpts struct {
