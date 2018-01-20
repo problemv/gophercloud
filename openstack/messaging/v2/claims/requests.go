@@ -35,8 +35,9 @@ func Create(client *gophercloud.ServiceClient, queueName string, clientId string
 	return
 }
 
-func Get(client *gophercloud.ServiceClient, queueName string, claimId string) (r GetResult) {
-	_, r.Err = client.Get(claimURL(client, queueName, claimId), &r.Body, nil)
+func Get(client *gophercloud.ServiceClient, queueName string, claimId string, clientId string) (r GetResult) {
+	_, r.Err = client.Get(claimURL(client, queueName, claimId), &r.Body, &gophercloud.RequestOpts{
+		MoreHeaders: map[string]string{"Client-ID": clientId},})
 	return
 }
 

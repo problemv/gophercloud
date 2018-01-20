@@ -66,7 +66,7 @@ func (opts ListOpts) ToMessageListQuery() (string, error) {
 }
 
 // ListMessages instructs OpenStack to provide a list of messages.
-func ListMessag(client *gophercloud.ServiceClient, queueName string, clientId string, opts ListOptsBuilder) pagination.Pager {
+func ListMessages(client *gophercloud.ServiceClient, queueName string, clientId string, opts ListOptsBuilder) pagination.Pager {
 	headers := map[string]string{"Client-ID": clientId}
 	url := actionURL(client, queueName, "messages")
 	if opts != nil {
