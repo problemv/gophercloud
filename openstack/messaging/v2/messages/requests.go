@@ -31,8 +31,8 @@ func Create(client *gophercloud.ServiceClient, queueName string, clientId string
 		return
 	}
 	_, r.Err = client.Post(actionURL(client, queueName, "messages"), b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{201},
-		MoreHeaders: map[string]string{"Client-ID": clientId,},
+		OkCodes:     []int{201},
+		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 	return
 }
@@ -86,21 +86,21 @@ func ListMessages(client *gophercloud.ServiceClient, queueName string, clientId 
 
 func DeleteMessages(client *gophercloud.ServiceClient, queueName string, clientId string) (r DeleteResult) {
 	_, r.Err = client.Delete(actionURL(client, queueName, "messages"), &gophercloud.RequestOpts{
-		MoreHeaders: map[string]string{"Client-ID": clientId,},
+		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 	return
 }
 
 func GetMessage(client *gophercloud.ServiceClient, queueName string, messageId string, clientId string) (r GetResult) {
 	_, r.Err = client.Get(messageURL(client, queueName, messageId), &r.Body, &gophercloud.RequestOpts{
-		MoreHeaders: map[string]string{"Client-ID": clientId,},
+		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 	return
 }
 
 func DeleteMessage(client *gophercloud.ServiceClient, queueName string, messageId string, clientId string) (r DeleteResult) {
 	_, r.Err = client.Delete(messageURL(client, queueName, messageId), &gophercloud.RequestOpts{
-		MoreHeaders: map[string]string{"Client-ID": clientId,},
+		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 	return
 }

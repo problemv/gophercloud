@@ -12,9 +12,9 @@ type CreateOptsBuilder interface {
 
 // CreateOpts params
 type CreateOpts struct {
-	Subscriber string `json:"subscriber"`
-	TTL int	`json:"ttl"`
-	Options map[string]interface{} `json:"options"`
+	Subscriber string                 `json:"subscriber"`
+	TTL        int                    `json:"ttl"`
+	Options    map[string]interface{} `json:"options"`
 }
 
 // ToQueueCreateMap constructs a request body from CreateOpts.
@@ -108,7 +108,7 @@ func Update(client *gophercloud.ServiceClient, queueName string, claimId string,
 	return
 }
 
-func Delete(client *gophercloud.ServiceClient, queueName string, subscriptionId string,) (r DeleteResult) {
+func Delete(client *gophercloud.ServiceClient, queueName string, subscriptionId string) (r DeleteResult) {
 	_, r.Err = client.Delete(deleteURL(client, queueName, subscriptionId), nil)
 	return
 }

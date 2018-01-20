@@ -59,7 +59,7 @@ func TestListMessages(t *testing.T) {
 
 	count := 0
 
-	messages.ListMessages(fake.ServiceClient(),"fake_queue", "1234", nil).EachPage(func(page pagination.Page) (bool, error) {
+	messages.ListMessages(fake.ServiceClient(), "fake_queue", "1234", nil).EachPage(func(page pagination.Page) (bool, error) {
 		count++
 		actual, err := messages.ExtractMessages(page)
 		if err != nil {
@@ -69,11 +69,11 @@ func TestListMessages(t *testing.T) {
 
 		expected := []messages.Message{
 			{
-				Body:	map[string]interface {}{"event":"BackupProgress", "total_bytes":"99614720", "current_bytes":"0"},
-				Age:	482,
-				Href:	"/v2/queues/beijing/messages/578edfe6508f153f256f717b",
-				ID:		"578edfe6508f153f256f717b",
-				TTL:	3600,
+				Body: map[string]interface{}{"event": "BackupProgress", "total_bytes": "99614720", "current_bytes": "0"},
+				Age:  482,
+				Href: "/v2/queues/beijing/messages/578edfe6508f153f256f717b",
+				ID:   "578edfe6508f153f256f717b",
+				TTL:  3600,
 			},
 		}
 

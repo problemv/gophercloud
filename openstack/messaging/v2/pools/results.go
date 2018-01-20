@@ -42,11 +42,11 @@ type PoolPage struct {
 }
 
 type Pool struct {
-	Href 	string 					`json:"href"`
-	Group 	string 					`json:"group"`
-	Name 	string					`json:"name"`
-	Weight	int						`json:"weight"`
-	URI		string					`json:"uri"`
+	Href   string `json:"href"`
+	Group  string `json:"group"`
+	Name   string `json:"name"`
+	Weight int    `json:"weight"`
+	URI    string `json:"uri"`
 }
 
 func (r commonResult) ExtractPool() (*Pool, error) {

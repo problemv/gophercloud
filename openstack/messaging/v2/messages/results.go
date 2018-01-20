@@ -42,12 +42,12 @@ type MessagePage struct {
 }
 
 type Message struct {
-	TTL 	int 					`json:"ttl"`
-	Delay 	int 					`json:"delay"`
-	Body 	map[string]interface{}	`json:"body"`
-	Age		int						`json:"age"`
-	Href	string					`json:"href"`
-	ID		string					`json:"id"`
+	TTL   int                    `json:"ttl"`
+	Delay int                    `json:"delay"`
+	Body  map[string]interface{} `json:"body"`
+	Age   int                    `json:"age"`
+	Href  string                 `json:"href"`
+	ID    string                 `json:"id"`
 }
 
 func (r commonResult) ExtractMessage() (*Message, error) {

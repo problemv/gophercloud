@@ -43,7 +43,7 @@ func Create(client *gophercloud.ServiceClient, queueName string, clientId string
 	}
 	// Zaqar uses PUT instead of Create for creating queues
 	_, r.Err = client.Put(updateURL(client, queueName), b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{201},
+		OkCodes:     []int{201},
 		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 	return
@@ -119,7 +119,7 @@ func Update(client *gophercloud.ServiceClient, queueName string, clientId string
 		return r
 	}
 	_, r.Err = client.Patch(updateURL(client, queueName), b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{201, 204},
+		OkCodes:     []int{201, 204},
 		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 	return
@@ -127,8 +127,8 @@ func Update(client *gophercloud.ServiceClient, queueName string, clientId string
 
 // Delete deletes the specified queue.
 func Delete(client *gophercloud.ServiceClient, queueName string, clientId string) (r DeleteResult) {
-	_, r.Err = client.Request("DELETE", deleteURL(client, queueName),  &gophercloud.RequestOpts{
-		MoreHeaders: map[string]string{"Client-ID": clientId,},
+	_, r.Err = client.Request("DELETE", deleteURL(client, queueName), &gophercloud.RequestOpts{
+		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 	return
 }
@@ -140,9 +140,9 @@ func GetStats(client *gophercloud.ServiceClient, queueName string) (r GetResult)
 }
 
 type ShareOpts struct {
-	Paths	[]string	`json:"paths,omitempty"`
-	Methods []string	`json:"methods,omitempty"`
-	Expires string		`json:"expires,omitempty"`
+	Paths   []string `json:"paths,omitempty"`
+	Methods []string `json:"methods,omitempty"`
+	Expires string   `json:"expires,omitempty"`
 }
 
 type ShareOptsBuilder interface {
@@ -164,14 +164,14 @@ func Share(client *gophercloud.ServiceClient, queueName string, clientId string,
 		return r
 	}
 	_, r.Err = client.Post(actionURL(client, queueName, "share"), b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200},
-		MoreHeaders: map[string]string{"Client-ID": clientId,},
+		OkCodes:     []int{200},
+		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 	return
 }
 
 type PurgeOpts struct {
-	ResourceTypes	[]string	`json:"resource_types,omitempty"`
+	ResourceTypes []string `json:"resource_types,omitempty"`
 }
 
 type PurgeOptsBuilder interface {
@@ -193,8 +193,8 @@ func Purge(client *gophercloud.ServiceClient, queueName string, clientId string,
 		return r
 	}
 	_, r.Err = client.Post(actionURL(client, queueName, "purge"), b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{204},
-		MoreHeaders: map[string]string{"Client-ID": clientId,},
+		OkCodes:     []int{204},
+		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 	return
 }

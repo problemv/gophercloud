@@ -40,4 +40,3 @@ func deleteURL(client *gophercloud.ServiceClient, queueName string, subscription
 func getURL(client *gophercloud.ServiceClient, queueName string) string {
 	return idURL(client, queueName)
 }
-

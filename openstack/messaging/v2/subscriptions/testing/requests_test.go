@@ -49,12 +49,12 @@ func TestList(t *testing.T) {
 
 		expected := []subscriptions.Subscription{
 			{
-				Age:		13,
-				ID:			"57692aa63990b48c644bb7e5",
+				Age:        13,
+				ID:         "57692aa63990b48c644bb7e5",
 				Subscriber: "http://10.229.49.117:5678",
-				Source:		"test",
-				TTL: 		360,
-				Options: 	map[string]interface{}{},
+				Source:     "test",
+				TTL:        360,
+				Options:    map[string]interface{}{},
 			},
 		}
 

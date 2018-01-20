@@ -29,15 +29,15 @@ func Create(client *gophercloud.ServiceClient, queueName string, clientId string
 		return
 	}
 	_, r.Err = client.Post(actionURL(client, queueName, "claims"), b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{201, 204},
-		MoreHeaders: map[string]string{"Client-ID": clientId,},
+		OkCodes:     []int{201, 204},
+		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 	return
 }
 
 func Get(client *gophercloud.ServiceClient, queueName string, claimId string, clientId string) (r GetResult) {
 	_, r.Err = client.Get(claimURL(client, queueName, claimId), &r.Body, &gophercloud.RequestOpts{
-		MoreHeaders: map[string]string{"Client-ID": clientId},})
+		MoreHeaders: map[string]string{"Client-ID": clientId}})
 	return
 }
 
@@ -71,15 +71,15 @@ func Update(client *gophercloud.ServiceClient, queueName string, claimId string,
 		return r
 	}
 	_, r.Err = client.Patch(claimURL(client, queueName, claimId), b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{204},
-		MoreHeaders: map[string]string{"Client-ID": clientId,},
+		OkCodes:     []int{204},
+		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 	return
 }
 
-func Delete(client *gophercloud.ServiceClient, queueName string, clientId string, claimId string,) (r DeleteResult) {
+func Delete(client *gophercloud.ServiceClient, queueName string, clientId string, claimId string) (r DeleteResult) {
 	_, r.Err = client.Delete(claimURL(client, queueName, claimId), &gophercloud.RequestOpts{
-		MoreHeaders: map[string]string{"Client-ID": clientId,},
+		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 	return
 }

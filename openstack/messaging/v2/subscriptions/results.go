@@ -42,13 +42,13 @@ type SubscriptionPage struct {
 }
 
 type Subscription struct {
-	Subscriber 		string 					`json:"subscriber"`
-	TTL 			int						`json:"ttl"`
-	Options 		map[string]interface{} 	`json:"options"`
-	SubscriptionID 	string					`json:"subscription_id"`
-	Age				int						`json:"age"`
-	ID				string					`json:"id"`
-	Source			string					`json:"source"`
+	Subscriber     string                 `json:"subscriber"`
+	TTL            int                    `json:"ttl"`
+	Options        map[string]interface{} `json:"options"`
+	SubscriptionID string                 `json:"subscription_id"`
+	Age            int                    `json:"age"`
+	ID             string                 `json:"id"`
+	Source         string                 `json:"source"`
 }
 
 func (r commonResult) ExtractSubscription() (*Subscription, error) {

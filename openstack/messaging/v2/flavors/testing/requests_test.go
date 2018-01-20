@@ -3,18 +3,17 @@ package testing
 import (
 	"testing"
 
+	"fmt"
 	"github.com/gophercloud/gophercloud/openstack/messaging/v2/flavors"
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fake "github.com/gophercloud/gophercloud/testhelper/client"
-	"fmt"
 	"net/http"
 )
-
 
 func TestGet(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
-	var MockResp =`
+	var MockResp = `
 	{
   		"href": "/v2/flavors/testflavor",
   		"capabilities": [
@@ -37,10 +36,10 @@ func TestGet(t *testing.T) {
 	})
 
 	expected := &flavors.Flavor{
-		Href:			"/v2/flavors/testflavor",
-		Capabilities:	[]string {"FIFO", "CLAIMS", "DURABILITY", "AOD", "HIGH_THROUGHPUT"},
-		PoolGroup:		"testgroup",
-		Name:			"testflavor",
+		Href:         "/v2/flavors/testflavor",
+		Capabilities: []string{"FIFO", "CLAIMS", "DURABILITY", "AOD", "HIGH_THROUGHPUT"},
+		PoolGroup:    "testgroup",
+		Name:         "testflavor",
 	}
 
 	flavor, err := flavors.Get(fake.ServiceClient(), "fake_flavor", "1234").Extract()

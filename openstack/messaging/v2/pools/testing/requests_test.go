@@ -48,11 +48,11 @@ func TestListPools(t *testing.T) {
 
 		expected := []pools.Pool{
 			{
-				Href:		"/v2/pools/test_pool1",
-				Group:		"poolgroup",
-				Name:		"test_pool1",
-				Weight:		60,
-				URI:		"mongodb://192.168.1.10:27017",
+				Href:   "/v2/pools/test_pool1",
+				Group:  "poolgroup",
+				Name:   "test_pool1",
+				Weight: 60,
+				URI:    "mongodb://192.168.1.10:27017",
 			},
 		}
 

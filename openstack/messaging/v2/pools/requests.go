@@ -34,8 +34,8 @@ func Create(client *gophercloud.ServiceClient, poolName string, clientId string,
 		return
 	}
 	_, r.Err = client.Put(poolURL(client, poolName), b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200, 201, 202},
-		MoreHeaders: map[string]string{"Client-ID": clientId,},
+		OkCodes:     []int{200, 201, 202},
+		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 	return
 }
@@ -78,9 +78,9 @@ func List(client *gophercloud.ServiceClient, clientId string, opts ListOptsBuild
 }
 
 type UpdateOpts struct {
-	Weight int `json:"weight" required:"true"`
-	URI string `json:"uri" required:"true"`
-	Group string `json:"group,omitempty"`
+	Weight  int                    `json:"weight" required:"true"`
+	URI     string                 `json:"uri" required:"true"`
+	Group   string                 `json:"group,omitempty"`
 	Options map[string]interface{} `json:"options,omitempty"`
 }
 
@@ -108,22 +108,22 @@ func Update(client *gophercloud.ServiceClient, poolName string, clientId string,
 		return r
 	}
 	_, r.Err = client.Patch(poolURL(client, poolName), b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200},
-		MoreHeaders: map[string]string{"Client-ID": clientId,},
+		OkCodes:     []int{200},
+		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 	return
 }
 
-func Get(client *gophercloud.ServiceClient, poolName string, clientId string,) (r GetResult) {
+func Get(client *gophercloud.ServiceClient, poolName string, clientId string) (r GetResult) {
 	_, r.Err = client.Get(poolURL(client, poolName), &r.Body, &gophercloud.RequestOpts{
-		MoreHeaders: map[string]string{"Client-ID": clientId,},
+		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 	return
 }
 
-func Delete(client *gophercloud.ServiceClient, poolName string, clientId string,) (r DeleteResult) {
+func Delete(client *gophercloud.ServiceClient, poolName string, clientId string) (r DeleteResult) {
 	_, r.Err = client.Delete(poolURL(client, poolName), &gophercloud.RequestOpts{
-		MoreHeaders: map[string]string{"Client-ID": clientId,},
+		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 	return
 }

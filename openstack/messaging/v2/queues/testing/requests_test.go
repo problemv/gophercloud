@@ -45,8 +45,8 @@ func TestListQueues(t *testing.T) {
 
 		expected := []queues.Queue{
 			{
-				Href:		"/v2/queues/beijing",
-				Name:		"beijing",
+				Href: "/v2/queues/beijing",
+				Name: "beijing",
 			},
 		}
 

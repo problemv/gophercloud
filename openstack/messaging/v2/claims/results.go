@@ -36,10 +36,10 @@ type UpdateResult struct {
 }
 
 type Claim struct {
-	Age			int						`json:"age"`
-	Href		string					`json:"href"`
-	TTL			int						`json:"ttl"`
-	Messages 	[]interface{}			`json:"messages"`
+	Age      int           `json:"age"`
+	Href     string        `json:"href"`
+	TTL      int           `json:"ttl"`
+	Messages []interface{} `json:"messages"`
 }
 
 func (r commonResult) ExtractClaim() (*Claim, error) {
