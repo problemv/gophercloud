@@ -29,7 +29,7 @@ func Create(client *gophercloud.ServiceClient, queueName string, clientId string
 		return
 	}
 	_, r.Err = client.Post(actionURL(client, queueName, "claims"), b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes:     []int{201, 204},
+		OkCodes:     []int{201},
 		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 	return
