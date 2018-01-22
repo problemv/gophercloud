@@ -21,10 +21,10 @@ func TestGet(t *testing.T) {
     			{
       				"body": {
         			"event": "BackupStarted"
-      			},
-      			"href": "/v2/queues/demoqueue/messages/51db6f78c508f17ddc924357?claim_id=51db7067821e727dc24df754"
-    		}
-  		],
+      				},
+      				"href": "/v2/queues/demoqueue/messages/51db6f78c508f17ddc924357?claim_id=51db7067821e727dc24df754"
+    			}
+  			],
   		"ttl": 300
 	}`
 
