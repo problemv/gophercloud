@@ -11,8 +11,6 @@ type CreateOptsBuilder interface {
 
 // CreateOpts params
 type CreateOpts struct {
-	Limit int `q:"limit,omitempty"`
-
 	TTL int `json:"ttl,omitempty"`
 
 	Grace int `json:"grace,omitempty"`
@@ -29,7 +27,7 @@ func Create(client *gophercloud.ServiceClient, queueName string, clientId string
 		return
 	}
 	_, r.Err = client.Post(actionURL(client, queueName, "claims"), b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes:     []int{201},
+		OkCodes:     []int{201, 204},
 		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 	return
