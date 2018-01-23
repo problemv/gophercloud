@@ -34,7 +34,7 @@ func Create(client *gophercloud.ServiceClient, poolName string, clientId string,
 		return
 	}
 	_, r.Err = client.Put(poolURL(client, poolName), b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes:     []int{200, 201, 202},
+		OkCodes:     []int{201},
 		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 	return

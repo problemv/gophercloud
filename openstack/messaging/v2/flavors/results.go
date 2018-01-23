@@ -45,7 +45,7 @@ type Flavor struct {
 	Href         string   `json:"href"`
 	PoolGroup    string   `json:"pool_group"`
 	Name         string   `json:"name"`
-	Pool         int      `json:"pool"`
+	Pool         string      `json:"pool"`
 	Capabilities []string `json:"capabilities"`
 }
 
