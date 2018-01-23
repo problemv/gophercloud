@@ -38,7 +38,7 @@ func TestListPools(t *testing.T) {
 
 	count := 0
 
-	pools.List(fake.ServiceClient(), pools.ListOpts{}).EachPage(func(page pagination.Page) (bool, error) {
+	pools.List(fake.ServiceClient(), "1234567890", pools.ListOpts{}).EachPage(func(page pagination.Page) (bool, error) {
 		count++
 		actual, err := pools.ExtractPools(page)
 		if err != nil {

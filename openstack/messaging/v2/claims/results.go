@@ -36,9 +36,10 @@ type UpdateResult struct {
 }
 
 type Message struct {
-	Age      int           `json:"age"`
-	Href     string        `json:"href"`
-	TTL      int           `json:"ttl"`
+	Age  int                    `json:"age"`
+	Href string                 `json:"href"`
+	TTL  int                    `json:"ttl"`
+	Body map[string]interface{} `json:"body"`
 }
 
 type Claim struct {

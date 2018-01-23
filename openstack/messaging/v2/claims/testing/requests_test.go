@@ -15,17 +15,16 @@ func TestGet(t *testing.T) {
 	defer th.TeardownHTTP()
 	var MockResp = `
 	{
-  		"age": 57,
-  		"href": "/v2/queues/demoqueue/claims/51db7067821e727dc24df754",
   		"messages": [
-    			{
-      				"body": {
-        			"event": "BackupStarted"
-      				},
-      				"href": "/v2/queues/demoqueue/messages/51db6f78c508f17ddc924357?claim_id=51db7067821e727dc24df754"
-    			}
-  			],
-  		"ttl": 300
+			{
+				"body": {
+					"event": "BackupStarted"
+				},
+				"href": "/v2/queues/demoqueue/messages/51db6f78c508f17ddc924357?claim_id=51db7067821e727dc24df754",
+				"age": 57,
+				"ttl": 300
+			}
+		]
 	}`
 
 	th.Mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -36,18 +35,18 @@ func TestGet(t *testing.T) {
 		fmt.Fprintf(w, MockResp)
 	})
 
-	expected := &claims.Claim{
+	content := claims.Message{
+		Body: map[string]interface{}{"event": "BackupStarted"},
 		Age:  57,
-		Href: "/v2/queues/demoqueue/claims/51db7067821e727dc24df754",
-		Messages: []interface{}{
-			map[string]interface{}{
-				"href": "/v2/queues/demoqueue/messages/51db6f78c508f17ddc924357?claim_id=51db7067821e727dc24df754",
-				"body": map[string]interface{}{
-					"event": "BackupStarted"}}},
-		TTL: 300,
+		Href: "/v2/queues/demoqueue/messages/51db6f78c508f17ddc924357?claim_id=51db7067821e727dc24df754",
+		TTL:  300}
+
+	expected := &claims.Claim{
+		Messages: []claims.Message{content},
 	}
 
-	claim, err := claims.Get(fake.ServiceClient(), "fake_queue", "1234").Extract()
+	claim, err := claims.Get(fake.ServiceClient(), "fake_queue", "1234", "1234567890").Extract()
+
 	th.AssertNoErr(t, err)
 	th.AssertDeepEquals(t, expected, claim)
 }
