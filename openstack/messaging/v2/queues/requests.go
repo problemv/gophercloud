@@ -91,9 +91,15 @@ func List(client *gophercloud.ServiceClient, clientId string, opts ListOptsBuild
 	return pager
 }
 
+type UpdateQueueBody struct {
+	Op    string `json:"op", required=true"`
+	Path  string `json:"path", required=true`
+	Value string `json:"value", required=true`
+}
+
 // UpdateOpts implements UpdateOpts
 type UpdateQueueOpts struct {
-	Opts map[string]interface{} `json:"-"`
+	Opts []UpdateQueueBody `json:"-"`
 }
 
 // UpdateOptsBuilder allows extensions to add additional parameters to the
@@ -119,8 +125,10 @@ func Update(client *gophercloud.ServiceClient, queueName string, clientId string
 		return r
 	}
 	_, r.Err = client.Patch(updateURL(client, queueName), b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes:     []int{201, 204},
-		MoreHeaders: map[string]string{"Client-ID": clientId},
+		OkCodes: []int{201, 204},
+		MoreHeaders: map[string]string{
+			"Client-ID":    clientId,
+			"Content-Type": "application/openstack-messaging-v2.0-json-patch"},
 	})
 	return
 }
@@ -130,6 +138,12 @@ func Delete(client *gophercloud.ServiceClient, queueName string, clientId string
 	_, r.Err = client.Request("DELETE", deleteURL(client, queueName), &gophercloud.RequestOpts{
 		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
+	return
+}
+
+func Get(client *gophercloud.ServiceClient, queueName string, clientId string) (r GetResult) {
+	_, r.Err = client.Get(idURL(client, queueName), &r.Body, &gophercloud.RequestOpts{
+		MoreHeaders: map[string]string{"Client-ID": clientId}})
 	return
 }
 
