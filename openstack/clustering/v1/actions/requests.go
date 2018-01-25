@@ -43,7 +43,7 @@ func (opts ListOpts) ToActionListQuery() (string, error) {
 	return q.String(), err
 }
 
-// ListDetail instructs OpenStack to provide a list of cluster.
+// ListDetail instructs OpenStack to provide a list of actions.
 func ListDetail(client *gophercloud.ServiceClient, opts ListOptsBuilder) pagination.Pager {
 	url := listURL(client)
 	if opts != nil {
@@ -57,4 +57,11 @@ func ListDetail(client *gophercloud.ServiceClient, opts ListOptsBuilder) paginat
 	return pagination.NewPager(client, url, func(r pagination.PageResult) pagination.Page {
 		return ActionPage{pagination.LinkedPageBase{PageResult: r}}
 	})
+}
+
+// Get retrieves details of a single action. Use ExtractAction to convert its
+// result into a Action.
+func Get(client *gophercloud.ServiceClient, id string) (r GetResult) {
+	_, r.Err = client.Get(getURL(client, id), &r.Body, nil)
+	return
 }
