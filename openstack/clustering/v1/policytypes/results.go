@@ -67,29 +67,29 @@ type ServerGroupSchemaPoliciesConstraints struct {
 
 type ServerGroupSchemaPolicies struct {
 	Constraints []ServerGroupSchemaPoliciesConstraints `json:"constraints"`
-	Default     string `json:"default"`
-	Description string `json:"description"`
-	Required    bool   `json:"required"`
-	Type        string `json:"type"`
-	Updatable   bool   `json:"updatable"`
+	Default     string                                 `json:"default"`
+	Description string                                 `json:"description"`
+	Required    bool                                   `json:"required"`
+	Type        string                                 `json:"type"`
+	Updatable   bool                                   `json:"updatable"`
 }
 
 type ServerGroupSchemaType struct {
-	Name ServerGroupSchemaName `json:"name"`
+	Name     ServerGroupSchemaName     `json:"name"`
 	Policies ServerGroupSchemaPolicies `json:"policies,omitempty"`
 }
 
 type ServerGroupType struct {
-	Description string `json:"description,omitempty"`
-	Required    bool   `json:"required"`
+	Description string                `json:"description,omitempty"`
+	Required    bool                  `json:"required"`
 	Schema      ServerGroupSchemaType `json:"schema,omitempty"`
-	Type      string `json:"type,omitempty"`
-	Updatable bool   `json:"updatable,omitempty"`
+	Type        string                `json:"type,omitempty"`
+	Updatable   bool                  `json:"updatable,omitempty"`
 }
 
 type SupportStatus struct {
 	Status string `json:"status"`
-	Since string `json:"since"`
+	Since  string `json:"since"`
 }
 
 type SupportStatusType struct {
@@ -147,7 +147,7 @@ func (sst *SupportStatusType) UnmarshalJSON(b []byte) error {
 		fmt.Printf("Detail Unmarshal Error: %v", err)
 		return err
 	}
-	support := SupportStatusType { SupportVersion: f.(map[string]interface{}) }
+	support := SupportStatusType{SupportVersion: f.(map[string]interface{})}
 	*sst = support
 
 	return nil

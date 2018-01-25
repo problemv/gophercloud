@@ -28,8 +28,8 @@ type CreateOpts struct {
 
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 
-        // Config The structured config associated with the cluster.
-        Config map[string]interface{} `json:"config,omitempty"`
+	// Config The structured config associated with the cluster.
+	Config map[string]interface{} `json:"config,omitempty"`
 }
 
 // ToClusterCreateMap constructs a request body from CreateOpts.
@@ -438,4 +438,3 @@ func CompleteLifecycle(client *gophercloud.ServiceClient, id string, opts Comple
 
 	return
 }
-

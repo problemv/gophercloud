@@ -2,13 +2,13 @@ package testing
 
 import (
 	"fmt"
+	"github.com/gophercloud/gophercloud/openstack/clustering/v1/policies"
 	"github.com/gophercloud/gophercloud/pagination"
+	th "github.com/gophercloud/gophercloud/testhelper"
+	fake "github.com/gophercloud/gophercloud/testhelper/client"
 	"net/http"
 	"testing"
 	"time"
-	"github.com/gophercloud/gophercloud/openstack/clustering/v1/policies"
-	th "github.com/gophercloud/gophercloud/testhelper"
-	fake "github.com/gophercloud/gophercloud/testhelper/client"
 )
 
 func TestListPolicies(t *testing.T) {
