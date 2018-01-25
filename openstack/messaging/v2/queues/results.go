@@ -12,7 +12,7 @@ type commonResult struct {
 
 // CreateResult is the response of a Create operations.
 type CreateResult struct {
-	commonResult
+	gophercloud.ErrResult
 }
 
 // GetResult is the response of a Get operations.
@@ -44,7 +44,7 @@ type QueuePage struct {
 type Queue struct {
 	DeadLetterQueue           string   `json:"_dead_letter_queue"`
 	DeadLetterQueueMessageTTL int      `json:"_dead_letter_queue_messages_ttl"`
-	DefaultMessageDelay       string   `json:"_default_message_delay"`
+	DefaultMessageDelay       int  	   `json:"_default_message_delay"`
 	DefaultMessageTTL         int      `json:"_default_message_ttl"`
 	Description               string   `json:"description"`
 	Expires                   string   `json:"expires"`
@@ -60,9 +60,9 @@ type Queue struct {
 
 func (r commonResult) ExtractQueue() (*Queue, error) {
 	var s struct {
-		Queue *Queue `json:"queue"`
+		Queue *Queue
 	}
-	err := r.ExtractInto(&s)
+	err := r.ExtractInto(&s.Queue)
 	return s.Queue, err
 }
 
