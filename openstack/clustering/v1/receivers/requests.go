@@ -146,8 +146,20 @@ func Delete(client *gophercloud.ServiceClient, id string) (r DeleteResult) {
 
 // NotifyReceiver Notifies message type receiver
 func NotifyReceiver(client *gophercloud.ServiceClient, id string) (r DeleteResult) {
-	_, r.Err = client.Post(notifyURL(client, id), "", &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200, 201, 202},
+	result, err := client.Post(notifyURL(client, id), "", &r.Body, &gophercloud.RequestOpts{
+		OkCodes: []int{200, 201, 202, 204},
 	})
+
+	if err != nil {
+		if err.Error() == "EOF" {
+			// valid 204
+			r.Err = nil
+		} else {
+			r.Err = err
+		}
+	} else {
+		r.Header = result.Header
+	}
+
 	return
 }

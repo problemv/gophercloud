@@ -74,7 +74,7 @@ type Cluster struct {
 
 func (r commonResult) ExtractCluster() (*Cluster, error) {
 	var s struct {
-		Cluster *Cluster `json:"cluster"`
+		Cluster Cluster `json:"cluster"`
 	}
 	err := r.ExtractInto(&s)
 
@@ -87,7 +87,7 @@ func (r commonResult) ExtractCluster() (*Cluster, error) {
 		}
 	}
 
-	return s.Cluster, err
+	return &s.Cluster, err
 }
 
 func (r commonResult) Extract() (*Cluster, error) {

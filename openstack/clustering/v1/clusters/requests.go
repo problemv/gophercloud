@@ -336,7 +336,7 @@ func (opts PolicyOpts) ToClusterPolicyMap(policyAction string) (map[string]inter
 // PolicyOpts params
 type PolicyOpts struct {
 	PolicyID string `json:"policy_id" required:"true"`
-	Enabled  bool   `json:"enabled,omitempty"`
+	Enabled  *bool  `json:"enabled,omitempty"`
 }
 
 // Attach Policy
@@ -371,7 +371,7 @@ func DetachPolicy(client *gophercloud.ServiceClient, id string, opts PolicyOpts)
 
 // Update Policy
 func UpdatePolicy(client *gophercloud.ServiceClient, id string, opts PolicyOpts) (r PostResult) {
-	b, err := opts.ToClusterPolicyMap("update_policy")
+	b, err := opts.ToClusterPolicyMap("policy_update")
 	if err != nil {
 		r.Err = err
 		return
