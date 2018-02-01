@@ -3,6 +3,7 @@ package nodes
 import (
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/pagination"
+	"net/http"
 )
 
 // CreateOptsBuilder Builder.
@@ -32,9 +33,11 @@ func Create(client *gophercloud.ServiceClient, opts CreateOptsBuilder) (r Create
 		return
 	}
 
-	_, r.Err = client.Post(createURL(client), b, &r.Body, &gophercloud.RequestOpts{
+	var result *http.Response
+	result, r.Err = client.Post(createURL(client), b, &r.Body, &gophercloud.RequestOpts{
 		OkCodes: []int{200, 201, 202},
 	})
+	r.Header = result.Header
 	return
 }
 
@@ -76,7 +79,9 @@ func (opts ListOpts) ToNodeListQuery() (string, error) {
 // Get retrieves details of a single node. Use ExtractNode to convert its
 // result into a Node.
 func Get(client *gophercloud.ServiceClient, id string) (r GetResult) {
-	_, r.Err = client.Get(getURL(client, id), &r.Body, nil)
+	var result *http.Response
+	result, r.Err = client.Get(getURL(client, id), &r.Body, nil)
+	r.Header = result.Header
 	return
 }
 
@@ -127,14 +132,19 @@ func Update(client *gophercloud.ServiceClient, id string, opts UpdateOptsBuilder
 		r.Err = err
 		return
 	}
-	_, r.Err = client.Patch(updateURL(client, id), b, &r.Body, &gophercloud.RequestOpts{
-		OkCodes: []int{200, 201},
+
+	var result *http.Response
+	result, r.Err = client.Patch(updateURL(client, id), b, &r.Body, &gophercloud.RequestOpts{
+		OkCodes: []int{200, 201, 202},
 	})
+	r.Header = result.Header
 	return
 }
 
 // Delete deletes the specified node ID.
 func Delete(client *gophercloud.ServiceClient, id string) (r DeleteResult) {
-	_, r.Err = client.Delete(deleteURL(client, id), nil)
+	var result *http.Response
+	result, r.Err = client.Delete(deleteURL(client, id), nil)
+	r.Header = result.Header
 	return
 }

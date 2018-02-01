@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/pagination"
+	"strings"
 	"time"
 )
 
@@ -46,6 +47,7 @@ type ClusterPage struct {
 }
 
 type Cluster struct {
+	ActionID        string                 `json:"-"`
 	Config          map[string]interface{} `json:"config"`
 	CreatedAt       time.Time              `json:"-"`
 	Data            map[string]interface{} `json:"data"`
@@ -72,14 +74,35 @@ type Cluster struct {
 
 func (r commonResult) ExtractCluster() (*Cluster, error) {
 	var s struct {
-		Cluster *Cluster `json:"cluster"`
+		Cluster Cluster `json:"cluster"`
 	}
 	err := r.ExtractInto(&s)
-	return s.Cluster, err
+
+	// Location: http://dev.senlin.cloud.blizzard.net:8778/v1/actions/625628cd-f877-44be-bde0-fec79f84e13d
+	if err == nil && len(r.Header) > 0 {
+		location := r.Header.Get("Location")
+		actionID := strings.Split(location, "actions/")
+		if len(actionID) >= 2 {
+			s.Cluster.ActionID = actionID[1]
+		}
+	}
+
+	return &s.Cluster, err
 }
 
 func (r commonResult) Extract() (*Cluster, error) {
-	return r.ExtractCluster()
+	s, err := r.ExtractCluster()
+
+	// Location: http://dev.senlin.cloud.blizzard.net:8778/v1/actions/625628cd-f877-44be-bde0-fec79f84e13d
+	if err == nil && len(r.Header) > 0 {
+		location := r.Header.Get("Location")
+		actionID := strings.Split(location, "actions/")
+		if len(actionID) >= 2 {
+			s.ActionID = actionID[1]
+		}
+	}
+
+	return s, err
 }
 
 // ExtractCluster provides access to the list of clusters in a page acquired from the ListDetail operation.

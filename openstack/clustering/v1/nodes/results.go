@@ -8,6 +8,7 @@ import (
 
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/pagination"
+	"strings"
 )
 
 // commonResult is the response of a base result.
@@ -47,6 +48,16 @@ func (r commonResult) Extract() (*Node, error) {
 		Node *Node `json:"node"`
 	}
 	err := r.ExtractInto(&s)
+
+	// Location: http://dev.senlin.cloud.blizzard.net:8778/v1/actions/625628cd-f877-44be-bde0-fec79f84e13d
+	if err == nil && len(r.Header) > 0 {
+		location := r.Header.Get("Location")
+		actionID := strings.Split(location, "actions/")
+		if len(actionID) >= 2 {
+			s.Node.ActionID = actionID[1]
+		}
+	}
+
 	return s.Node, err
 }
 
@@ -88,6 +99,8 @@ type DataType struct {
 
 // Node represents a node structure
 type Node struct {
+	ActionID string `json:"-"`
+
 	ClusterUUID string `json:"cluster_id"`
 
 	CreatedAt time.Time `json:"-"`
