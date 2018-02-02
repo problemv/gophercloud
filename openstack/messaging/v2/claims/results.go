@@ -36,7 +36,7 @@ type UpdateResult struct {
 }
 
 type Message struct {
-	Age  int                    `json:"age"`
+	Age  float32                `json:"age"`
 	Href string                 `json:"href"`
 	TTL  int                    `json:"ttl"`
 	Body map[string]interface{} `json:"body"`
@@ -47,9 +47,11 @@ type Claim struct {
 }
 
 func (r commonResult) ExtractClaim() (*Claim, error) {
-	claim := Claim{}
-	err := r.ExtractInto(&claim)
-	return &claim, err
+	var s struct {
+		Claim *Claim `json:"messages"`
+	}
+	err := r.ExtractInto(&s.Claim)
+	return s.Claim, err
 }
 
 func (r commonResult) Extract() (*Claim, error) {
