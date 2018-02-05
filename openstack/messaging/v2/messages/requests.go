@@ -24,7 +24,7 @@ func (opts CreateOpts) ToMessageCreateMap() (map[string]interface{}, error) {
 	return gophercloud.BuildRequestBody(opts, "messages")
 }
 
-func Create(client *gophercloud.ServiceClient, queueName string, clientId string, opts CreateOptsBuilder) (r CreateResult) {
+func Create(client *gophercloud.ServiceClient, queueName string, clientId string, opts CreateOpts) (r CreateResult) {
 	b, err := opts.ToMessageCreateMap()
 	if err != nil {
 		r.Err = err
