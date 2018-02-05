@@ -46,14 +46,13 @@ type Claim struct {
 	Messages []Message `json:"messages"`
 }
 
-func (r commonResult) ExtractClaim() (*Claim, error) {
-	var s struct {
-		Claim *Claim `json:"messages"`
-	}
-	err := r.ExtractInto(&s.Claim)
-	return s.Claim, err
+func (r commonResult) ExtractClaim() (Claim, error) {
+	claim := Claim{}
+
+	err := r.ExtractInto(&claim)
+	return claim, err
 }
 
-func (r commonResult) Extract() (*Claim, error) {
+func (r commonResult) Extract() (Claim, error) {
 	return r.ExtractClaim()
 }
