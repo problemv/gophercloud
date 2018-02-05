@@ -42,7 +42,7 @@ type Result struct {
 // the `Result.Body`. This would be useful for OpenStack providers that have
 // different fields in the response object than OpenStack proper.
 func (r Result) ExtractInto(to interface{}) error {
-	if r.Err != nil {
+	if r.Err != nil && r.Err.Error() != "EOF" {
 		return r.Err
 	}
 
