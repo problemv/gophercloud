@@ -43,7 +43,7 @@ func Create(client *gophercloud.ServiceClient, queueName string, clientId string
 	}
 	// Zaqar uses PUT instead of Create for creating queues
 	_, r.Err = client.Put(updateURL(client, queueName), b, r.Body, &gophercloud.RequestOpts{
-		OkCodes:     []int{201},
+		OkCodes:     []int{201, 204},
 		MoreHeaders: map[string]string{"Client-ID": clientId},
 	})
 
