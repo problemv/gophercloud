@@ -394,3 +394,9 @@ func NewLoadBalancerV2(client *gophercloud.ProviderClient, eo gophercloud.Endpoi
 	sc.ResourceBase = sc.Endpoint + "v2.0/"
 	return sc, err
 }
+
+// NewMessagingV2 creates a ServiceClient that may be used with the v2 messaging
+// service.
+func NewMessagingV2(client *gophercloud.ProviderClient, eo gophercloud.EndpointOpts) (*gophercloud.ServiceClient, error) {
+	return initClientOpts(client, eo, "messaging")
+}
