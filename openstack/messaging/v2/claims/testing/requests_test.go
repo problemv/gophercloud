@@ -6,7 +6,6 @@ import (
 	"github.com/gophercloud/gophercloud/openstack/messaging/v2/claims"
 	th "github.com/gophercloud/gophercloud/testhelper"
 	fake "github.com/gophercloud/gophercloud/testhelper/client"
-	"github.com/gophercloud/gophercloud.bak/testhelper/client"
 )
 
 func TestGet(t *testing.T) {
@@ -57,6 +56,6 @@ func TestDelete(t *testing.T){
 	defer th.TeardownHTTP()
 	HandleDeleteSuccessfully(t)
 
-	err := claims.Delete(client.ServiceClient(), QueueName, ClaimID, ClientID).ExtractErr()
+	err := claims.Delete(fake.ServiceClient(), QueueName, ClaimID, ClientID).ExtractErr()
 	th.AssertNoErr(t, err)
 }
