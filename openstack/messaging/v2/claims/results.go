@@ -15,6 +15,14 @@ func (r commonResult) Extract() (*Claim, error) {
 	return s, err
 }
 
+func (r CreateResult) Extract() ([]Messages, error) {
+	var s struct {
+		Messages []Messages `json:"messages"`
+	}
+	err := r.ExtractInto(&s)
+	return s.Messages, err
+}
+
 // CreateResult is the response of a Create operations.
 type CreateResult struct {
 	commonResult
@@ -42,15 +50,15 @@ type UpdateResult struct {
 }
 
 type Messages struct {
-	Age  float32 `json:"age"`
-	Href string  `json:"href"`
-	TTL  int     `json:"ttl"`
-	Body string  `json:"body"`
+	Age  float32                `json:"age"`
+	Href string                 `json:"href"`
+	TTL  int                    `json:"ttl"`
+	Body map[string]interface{} `json:"body"`
 }
 
 type Claim struct {
-	Age      float32   `json:"age"`
-	Href     string    `json:"href"`
+	Age      float32    `json:"age"`
+	Href     string     `json:"href"`
 	Messages []Messages `json:"messages"`
-	TTL      int       `json:"ttl"`
+	TTL      int        `json:"ttl"`
 }

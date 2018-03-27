@@ -23,7 +23,7 @@ const GetClaimResponse = `
 	"href": "/v2/queues/demoqueue/claims/51db7067821e727dc24df754",
 	"messages": [
 		{
-			"body": "BackupStarted",
+			"body": {"event": "BackupStarted"},
 			"href": "/v2/queues/FakeTestQueue/messages/51db6f78c508f17ddc924357?claim_id=51db7067821e727dc24df754",
 			"age": 57,
 			"ttl": 300
@@ -37,7 +37,7 @@ const CreateClaimResponse = `
 {
 	"messages": [
 		{
-			"body": "BackupStarted",
+			"body": {"event": "BackupStarted"},
 			"href": "/v2/queues/FakeTestQueue/messages/51db6f78c508f17ddc924357?claim_id=51db7067821e727dc24df754",
 			"age": 57,
 			"ttl": 300
@@ -60,6 +60,7 @@ const UpdateClaimRequest = `
 	"grace": 1600
 }`
 
+// FirstClaim is the result of a get claim.
 var FirstClaim = claims.Claim{
 	Age:  50,
 	Href: "/v2/queues/demoqueue/claims/51db7067821e727dc24df754",
@@ -68,20 +69,19 @@ var FirstClaim = claims.Claim{
 			Age:  57,
 			Href: fmt.Sprintf("/v2/queues/%s/messages/51db6f78c508f17ddc924357?claim_id=%s", QueueName, ClaimID),
 			TTL:  300,
-			Body: "BackupStarted",
+			Body: map[string]interface{}{"event": "BackupStarted"},
 		},
 	},
 	TTL: 50,
 }
 
-var CreatedClaim = claims.Claim{
-	Messages: []claims.Messages{
-		{
-			Age:  57,
-			Href: fmt.Sprintf("/v2/queues/%s/messages/51db6f78c508f17ddc924357?claim_id=%s", QueueName, ClaimID),
-			TTL:  300,
-			Body: "BackupStarted",
-		},
+// CreatedClaim is the result of a create request.
+var CreatedClaim = []claims.Messages{
+	{
+		Age:  57,
+		Href: fmt.Sprintf("/v2/queues/%s/messages/51db6f78c508f17ddc924357?claim_id=%s", QueueName, ClaimID),
+		TTL:  300,
+		Body: map[string]interface{}{"event": "BackupStarted"},
 	},
 }
 
@@ -97,6 +97,7 @@ func HandleGetSuccessfully(t *testing.T) {
 		})
 }
 
+// HandleCreateSuccessfully configures the test server to respond to a Create request.
 func HandleCreateSuccessfully(t *testing.T) {
 	th.Mux.HandleFunc(fmt.Sprintf("/v2/queues/%s/claims", QueueName),
 		func(w http.ResponseWriter, r *http.Request) {
@@ -110,6 +111,7 @@ func HandleCreateSuccessfully(t *testing.T) {
 		})
 }
 
+// HandleUpdateSuccessfully configures the test server to respond to a Update request.
 func HandleUpdateSuccessfully(t *testing.T) {
 	th.Mux.HandleFunc(fmt.Sprintf("/v2/queues/%s/claims/%s", QueueName, ClaimID),
 		func(w http.ResponseWriter, r *http.Request) {

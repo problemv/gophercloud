@@ -34,7 +34,7 @@ func TestCreate(t *testing.T) {
 
 	actual, err := claims.Create(fake.ServiceClient(), QueueName, ClientID, createOpts, CreateQueryOpts).Extract()
 	th.AssertNoErr(t, err)
-	th.CheckDeepEquals(t, &CreatedClaim, actual)
+	th.CheckDeepEquals(t, CreatedClaim, actual)
 }
 
 func TestUpdate(t *testing.T) {
@@ -51,7 +51,7 @@ func TestUpdate(t *testing.T) {
 	th.AssertNoErr(t, err)
 }
 
-func TestDelete(t *testing.T){
+func TestDelete(t *testing.T) {
 	th.SetupHTTP()
 	defer th.TeardownHTTP()
 	HandleDeleteSuccessfully(t)
